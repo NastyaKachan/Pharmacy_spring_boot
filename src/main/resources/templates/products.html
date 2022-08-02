@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Товары</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/templatemo.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="/assets/css/fontawesome.min.css">
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+<th:block th:include="/blocks/header.html"/>
+
+<div class="w-90 p-3">
+    <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilters"
+            aria-expanded="false" aria-controls="collapseFilters">
+        Найти
+    </button>
+</div>
+<div class="collapsing" id="collapseFilters">
+    <div class="card card-body">
+        <form class="row g-3" th:action="@{'/products/page/' + ${numberPage}}">
+            <div class="col-md-4 mb-3">
+                <label for="drugNameFilter" class="form-label">Название товара:</label>
+                <input type="text" id="drugNameFilter" name="drugNameFilter" class="form-control"
+                       th:placeholder="${drugNameFilter}">
+            </div>
+
+            <div class="col-12">
+                <input type="hidden" name="size" th:value="${size}">
+                <input type="hidden" name="sortField" th:value="${sortField}">
+                <input type="hidden" name="sortDir" th:value="${sortDir}">
+                <button type="submit" class="btn btn-outline-info">Сохранить</button>
+                <button type="submit" class="btn btn-outline-info">Отменить</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="w-90 p-3">
+    <form th:action="@{/products/add_product}">
+        <button type="submit" class="btn btn-info">Добавить товар</button>
+    </form>
+</div>
+<div class="w-90 p-3" style="text-align: center;">
+    <div th:if="${#authorization.expression('isAuthenticated()')}" class="text fw-light fs-6 lh-1">
+    </div>
+    <div th:switch="${productDtoList}">
+        <h2 th:case="null">Товаров нет</h2>
+        <div th:case="*">
+            <h2>Товары</h2>
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${drugNameFilter != null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?drugNameFilter=' + ${drugNameFilter} + '&size=' +
+                            ${size} + '&sortField=id&sortDir=' + ${descSort}}">№</a>
+                        </th:block>
+                        <th:block th:if="${drugNameFilter == null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?size=' + ${size} + '&sortField=id&sortDir=' +
+                            ${descSort}}">№</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${drugNameFilter != null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?drugNameFilter=' + ${drugNameFilter} +
+                            '&size=' + ${size} + '&sortField=drugName&sortDir=' + ${descSort}}">Наименование</a>
+                        </th:block>
+                        <th:block th:if="${drugNameFilter == null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?size=' + ${size} + '&sortField=drugName&sortDir=' +
+                            ${descSort}}">Наименование</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${drugNameFilter != null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?drugNameFilter=' + ${drugNameFilter} +
+                            '&size=' + ${size} + '&sortField=prescription&sortDir=' + ${descSort}}">Порядок отпуска</a>
+                        </th:block>
+                        <th:block th:if="${drugNameFilter == null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?size=' + ${size} + '&sortField=prescription&sortDir=' +
+                            ${descSort}}">Порядок отпуска</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${drugNameFilter != null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?drugNameFilter=' + ${drugNameFilter} +
+                            '&size=' + ${size} + '&sortField=instruction&sortDir=' + ${descSort}}">Инструкция</a>
+                        </th:block>
+                        <th:block th:if="${drugNameFilter == null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?size=' + ${size} + '&sortField=instruction&sortDir=' +
+                            ${descSort}}">Инструкция</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${drugNameFilter != null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?drugNameFilter=' + ${drugNameFilter} +
+                            '&size=' + ${size} + '&sortField=price&sortDir=' + ${descSort}}">Цена</a>
+                        </th:block>
+                        <th:block th:if="${drugNameFilter == null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?size=' + ${size} + '&sortField=price&sortDir=' +
+                            ${descSort}}">Цена</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${drugNameFilter != null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?drugNameFilter=' + ${drugNameFilter} +
+                            '&size=' + ${size} + '&sortField=countAvailable&sortDir=' + ${descSort}}">Количество</a>
+                        </th:block>
+                        <th:block th:if="${drugNameFilter == null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?size=' + ${size} + '&sortField=countAvailable&sortDir=' +
+                            ${descSort}}">Количество</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${drugNameFilter != null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?drugNameFilter=' + ${drugNameFilter} +
+                            '&size=' + ${size} + '&sortField=datetimeUpdate&sortDir=' + ${descSort}}">Дата обновления</a>
+                        </th:block>
+                        <th:block th:if="${drugNameFilter == null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?size=' + ${size} + '&sortField=datetimeUpdate&sortDir=' +
+                            ${descSort}}">Дата обновления</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${drugNameFilter != null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?drugNameFilter=' + ${drugNameFilter} +
+                            '&size=' + ${size} + '&sortField=producer&sortDir=' + ${descSort}}">Производитель</a>
+                        </th:block>
+                        <th:block th:if="${drugNameFilter == null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?size=' + ${size} + '&sortField=producer&sortDir=' +
+                            ${descSort}}">Производитель</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${drugNameFilter != null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?drugNameFilter=' + ${drugNameFilter} +
+                            '&size=' + ${size} + '&sortField=mnn&sortDir=' + ${descSort}}">МНН</a>
+                        </th:block>
+                        <th:block th:if="${drugNameFilter == null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?size=' + ${size} + '&sortField=mnn&sortDir=' +
+                            ${descSort}}">МНН</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${drugNameFilter != null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?drugNameFilter=' + ${drugNameFilter} +
+                            '&size=' + ${size} + '&sortField=category&sortDir=' + ${descSort}}">Категория</a>
+                        </th:block>
+                        <th:block th:if="${drugNameFilter == null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?size=' + ${size} + '&sortField=category&sortDir=' +
+                            ${descSort}}">Категория</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${drugNameFilter != null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?drugNameFilter=' + ${drugNameFilter} +
+                            '&size=' + ${size} + '&sortField=category&sortDir=' + ${descSort}}">Аптеки</a>
+                        </th:block>
+                        <th:block th:if="${drugNameFilter == null}">
+                            <a th:href="@{'/products/page/' + ${numberPage} + '?size=' + ${size} + '&sortField=category&sortDir=' +
+                            ${descSort}}">Аптеки</a>
+                        </th:block>
+                    </th>
+
+
+                    <th colspan="2" class="align-middle">Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${productDtoList}">
+                    <td th:text="${product.id}"></td>
+                    <td th:text="${product.drugName}"></td>
+                    <td th:text="${product.prescription.value}"></td>
+                    <td th:text="${product.instruction}"></td>
+                    <td th:text="${product.price}"></td>
+                    <td th:text="${product.countAvailable}"></td>
+                    <td th:text="${product.datetimeUpdate}"></td>
+                    <td th:text="${product.producer.name_producer}"></td>
+                    <td th:text="${product.mnn.mnn}"></td>
+                    <td th:text="${product.category.title}"></td>
+                    <td>
+                        <th:block th:each="pharmacy : ${product.pharmacies}">
+                            <div th:text="${pharmacy.namePharmacy}"/>
+                        </th:block>
+                    </td>
+
+                    <td>
+                        <form th:method="get"
+                              th:action="@{/products/page/{id}/{page}(id=${product.id}, page=${numberPage})}">
+                            <button type="submit" class="btn btn-outline-info">Редактировать</button>
+                        </form>
+                    <td>
+                        <form th:method="post"
+                              th:action="@{/products/page/{id}/{page}(id=${product.id}, page=${numberPage}, size=${size})}">
+                            <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
+                                    data-bs-target="#deleteProductModal"
+                                    th:attr="data-bs-target='#deleteProductModal' + ${product.id}">
+                                Удалить
+                            </button>
+                            <div class="modal modal-delete" th:id="deleteProductModal + ${product.id}" tabindex="-1"
+                                 aria-labelledby="deleteProductLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteProductLabel">Удаление товара</h5>
+                                            <button type="button" class="btn-info" data-bs-dismiss="modal"
+                                                    aria-label="Закрыть"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Вы подтверждаете удаление товара?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">
+                                                Нет
+                                            </button>
+                                            <button type="submit" class="btn btn-outline-info">Да</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<nav aria-label="paginatedProducts">
+    <div style="text-align: center;">
+        <th:block
+                th:if="${drugNameFilter != null}">
+            <form
+                    th:action="@{'/produts/page/' + ${numberPage} + '?drugNameFilter=' + ${drugNameFilter} +
+                    '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${descSort}}">
+                <div th:if="${size == 5}">
+                    <label>Наименований на странице:
+                        <select class="form-select" aria-label="Default select" size="1" name="size"
+                                th:value="${size}">
+                            <option selected value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                        </select>
+                        <input type="hidden" name="sortField" th:value="${sortField}">
+                        <input type="hidden" name="sortDir" th:value="${sortDir}">
+                        <button type="submit" class="btn btn-outline-info">ОК</button>
+                    </label>
+                </div>
+                <div th:if="${size == 10}">
+                    <label>Наименований на странице:
+                        <select class="form-select" aria-label="Default select" size="1" name="size"
+                                th:value="${size}">
+                            <option value="5">5</option>
+                            <option selected value="10">10</option>
+                            <option value="15">15</option>
+                        </select>
+                        <input type="hidden" name="sortField" th:value="${sortField}">
+                        <input type="hidden" name="sortDir" th:value="${sortDir}">
+                        <input type="hidden" name="drugNameFilter" th:value="${drugNameFilter}">
+                        <button type="submit" class="btn btn-outline-info">ОК</button>
+                    </label>
+                </div>
+                <div th:if="${size == 15}">
+                    <label>Наименований на странице:
+                        <select class="form-select" aria-label="Default select" size="1" name="size"
+                                th:value="${size}">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option selected value="15">15</option>
+                        </select>
+                        <input type="hidden" name="sortField" th:value="${sortField}">
+                        <input type="hidden" name="sortDir" th:value="${sortDir}">
+                        <input type="hidden" name="drugNameFilter" th:value="${drugNameFilter}">
+                        <button type="submit" class="btn btn-outline-info">ОК</button>
+                    </label>
+                </div>
+            </form>
+        </th:block>
+        <th:block
+                th:if="${drugNameFilter == null}">
+            <form th:action="@{'/products/page/'+ ${numberPage} + '?size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+                <div th:if="${size == 5}">
+                    <label>Наименований на странице:
+                        <select class="form-select" aria-label="Default select" size="1" name="size"
+                                th:value="${size}">
+                            <option selected value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                        </select>
+                        <input type="hidden" name="sortField" th:value="${sortField}">
+                        <input type="hidden" name="sortDir" th:value="${sortDir}">
+                        <button type="submit" class="btn btn-outline-info">ОК</button>
+                    </label>
+                </div>
+                <div th:if="${size == 10}">
+                    <label>Отображение по:
+                        <select class="form-select" aria-label="Default select" size="1" name="size"
+                                th:value="${size}">
+                            <option value="5">5</option>
+                            <option selected value="10">10</option>
+                            <option value="15">15</option>
+                        </select>
+                        <input type="hidden" name="sortField" th:value="${sortField}">
+                        <input type="hidden" name="sortDir" th:value="${sortDir}">
+                        <button type="submit" class="btn btn-outline-info">ОК</button>
+                    </label>
+                </div>
+                <div th:if="${size == 15}">
+                    <label>Отображение по:
+                        <select class="form-select" aria-label="Default select" size="1" name="size"
+                                th:value="${size}">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option selected value="15">15</option>
+                        </select>
+                        <input type="hidden" name="sortField" th:value="${sortField}">
+                        <input type="hidden" name="sortDir" th:value="${sortDir}">
+                        <button type="submit" class="btn btn-outline-info">ОК</button>
+                    </label>
+                </div>
+            </form>
+        </th:block>
+    </div>
+    <p>
+    <ul class="pagination justify-content-center">
+        <li class="page-item">
+            <th:block
+                    th:if="${drugNameFilter != null}">
+                <a class="page-link" th:if="${numberPage > 1}"
+                   th:href="@{'/products/page/' + ${1} + '?drugNameFilter=' + ${drugNameFilter} +
+                   '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Первая
+                </a>
+                <span class="btn btn-outline-info" th:unless="${numberPage > 1}">Первая</span>
+            </th:block>
+            <th:block
+                    th:if="${drugNameFilter == null}">
+                <a class="page-link" th:if="${numberPage > 1}"
+                   th:href="@{'/products/page/'+ ${1} + '?size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Первая
+                </a>
+                <span class="btn btn-outline-info" th:unless="${numberPage > 1}">Первая</span>
+            </th:block>
+        </li>
+        <li class="page-item">
+            <th:block
+                    th:if="${drugNameFilter != null}">
+                <a class="page-link" th:if="${numberPage > 1}"
+                   th:href="@{'/products/page/' + ${numberPage - 1} + '?drugNameFilter=' + ${drugNameFilter} +
+                   '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                <span class="btn btn-outline-info" th:unless="${numberPage > 1}">&laquo;</span>
+            </th:block>
+            <th:block
+                    th:if="${drugNameFilter == null}">
+                <a class="page-link" th:if="${numberPage > 1}"
+                   th:href="@{'/products/page/' + ${numberPage - 1} + '?size=' + ${size} + '&sortField=' +
+                   ${sortField} + '&sortDir=' + ${sortDir}}">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                <span class="btn btn-outline-info" th:unless="${numberPage > 1}">&laquo;</span>
+            </th:block>
+        </li>
+        <li class="d-flex flex-row page-item active" aria-current="page">
+            <th:block
+                    th:if="${drugNameFilter != null}">
+            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <a class="page-link" th:if="${i != numberPage}"
+           th:href="@{'/products/page/' + ${i} + '?drugNameFilter=' + ${drugNameFilter} + '&size=' + ${size} +
+           '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]
+        </a>
+        <span class="btn btn-outline-info" th:unless="${i != numberPage}">[[${i}]]</span>
+        </span>
+            </th:block>
+            <th:block
+                    th:if="${drugNameFilter == null}">
+            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <a class="page-link" th:if="${i != numberPage}"
+           th:href="@{'/products/page/' + ${i} + '?size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]
+        </a>
+        <span class="btn btn-outline-info" th:unless="${i != numberPage}">[[${i}]]</span>
+        </span>
+            </th:block>
+        </li>
+        <li class="page-item">
+            <th:block
+                    th:if="${drugNameFilter != null}">
+                <a class="page-link" th:if="${numberPage < totalPages}"
+                   th:href="@{'/products/page/' + ${numberPage + 1} + '?drugNameFilter=' + ${drugNameFilter}+
+                   '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <span class="btn btn-outline-info" th:unless="${numberPage < totalPages}">&raquo;</span>
+            </th:block>
+            <th:block
+                    th:if="${drugNameFilter == null}">
+                <a class="page-link" th:if="${numberPage < totalPages}"
+                   th:href="@{'/products/page/' + ${numberPage + 1} + '?size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <span class="btn btn-outline-info" th:unless="${numberPage < totalPages}">&raquo;</span>
+            </th:block>
+        </li>
+        <li class="page-item">
+            <th:block
+                    th:if="${drugNameFilter != null}">
+                <a class="page-link" th:if="${numberPage < totalPages}"
+                   th:href="@{'/products/page/' + ${totalPages} + '?drugNameFilter=' + ${drugNameFilter} +
+                   '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Последняя
+                </a>
+                <span class="btn btn-outline-info" th:unless="${numberPage < totalPages}">Последняя</span>
+            </th:block>
+            <th:block
+                    th:if="${drugNameFilter == null}">
+                <a class="page-link" th:if="${numberPage < totalPages}"
+                   th:href="@{'/products/page/' + ${totalPages} + '?size=' + ${size} + '&sortField=' + ${sortField} +
+                   '&sortDir=' + ${sortDir}}">Последняя
+                </a>
+                <span class="btn btn-outline-info" th:unless="${numberPage < totalPages}">Последняя</span>
+            </th:block>
+        </li>
+    </ul>
+    <div style="text-align: center;">
+        Всего позиций [[${totalElements}]] : Страница [[${numberPage}]] из [[${totalPages}]]
+    </div>
+</nav>
+<div class="wrapper flex-grow-1">
+</div>
+<p>
+
+    <th:block th:include="/blocks/footer.html"/>
+    <script src="/assets/js/jquery-1.11.0.min.js"></script>
+    <script src="/assets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/templatemo.js"></script>
+    <script src="/assets/js/custom.js"></script>
+
+</body>
+
+</html>

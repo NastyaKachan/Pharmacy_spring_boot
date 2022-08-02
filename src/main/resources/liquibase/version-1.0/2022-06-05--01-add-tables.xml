@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+
+    <changeSet id="pharmacy-1.1" author="NastyaKachan">
+        <sql>
+            create table category
+            (
+                category_id    int auto_increment not null
+                    primary key,
+                types char(1) null,
+                title varchar(255) null
+            );
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="pharmacy-1.2" author="NastyaKachan">
+        <sql>
+            create table region
+            (
+                region_id   int auto_increment not null
+                    primary key,
+                name_region varchar(255) null
+            );
+
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="pharmacy-1.3" author="NastyaKachan">
+        <sql>
+            create table city
+            (
+                city_id   int auto_increment not null
+                    primary key,
+                name_city varchar(255) null,
+                region_id int not null,
+                constraint fk_city_region
+                    foreign key (region_id) references region (region_id)
+            );
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="pharmacy-1.4" author="NastyaKachan">
+        <sql>
+            create table pharmacy_chain
+            (
+                chain_id   int auto_increment not null
+                    primary key,
+                name_chain varchar(255) null
+            );
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="pharmacy-1.5" author="NastyaKachan">
+        <sql>
+            create table pharmacy
+            (
+                pharmacy_id   int auto_increment not null
+                    primary key,
+                name_pharmacy varchar(255) null,
+                address       varchar(255) null,
+                working_hours  varchar(255) null,
+                phone_number   varchar(255) null,
+                chain_id      int not null,
+                city_id       int not null,
+                constraint fk_pharmacy_chain
+                    foreign key (chain_id) references pharmacy_chain (chain_id),
+                constraint fk_pharmacy_city
+                    foreign key (city_id) references city (city_id)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="pharmacy-1.6" author="NastyaKachan">
+        <sql>
+            create table producer
+            (
+                producer_id   int auto_increment
+                    primary key,
+                country       varchar(255) null,
+                name_producer varchar(255) null
+            );
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="pharmacy-1.7" author="NastyaKachan">
+        <sql>
+            create table mnn
+            (
+                mnn_id  int auto_increment not null
+                    primary key,
+                mnn varchar(255)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="pharmacy-1.8" author="NastyaKachan">
+        <sql>
+            create table product
+            (
+                product_id              int auto_increment not null
+                    primary key,
+                count_available DECIMAL(19, 4),
+                drug_name       varchar(255),
+                instruction     varchar(255) null,
+                prescription    varchar(255),
+                price           DECIMAL(19, 4),
+                datetime_update  datetime,
+                category_id     int null,
+                mnn_id          int null,
+                producer_id     int null,
+                constraint fk_product_category
+                    foreign key (category_id) references category (category_id),
+                constraint fk_product_mnn
+                    foreign key (mnn_id) references mnn (mnn_id),
+                constraint fk_product_producer
+                    foreign key (producer_id) references producer (producer_id)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="pharmacy-1.9" author="NastyaKachan">
+        <sql>
+            create table pharmacy_product
+            (
+                product_id  int not null,
+                pharmacy_id int not null,
+                primary key (pharmacy_id, product_id),
+                constraint fk_pharmacy_product_product
+                    foreign key (product_id) references product (product_id),
+                constraint fk_pharmacy_product_pharmacy
+                    foreign key (pharmacy_id) references pharmacy (pharmacy_id)
+            );
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

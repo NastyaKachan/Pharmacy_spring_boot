@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="datatest-1" author="Nastya Kachan" context="test">
+        <sql>
+            insert into category(category_id, types, title)
+            VALUES (1, 'A', 'Препараты, влияющие на пищеварительный тракт и обмен веществ'),
+                   (2, 'B', 'Препараты, влияющие на кроветворение и кровь'),
+                   (3, 'C', 'Препараты для лечения заболеваний сердечно-сосудистой системы'),
+                   (4, 'D', 'Препараты для лечения заболеваний кожи'),
+                   (5, 'G', 'Препараты для лечения заболеваний мочеполовой системы и половые гормоны'),
+                   (6, 'H', 'Гормональные препараты для системного использования (исключая половые гормоны)'),
+                   (7, 'J', 'Противомикробные препараты для системного использования'),
+                   (8, 'L', 'Противоопухолевые препараты и иммуномодуляторы'),
+                   (9, 'M', 'Препараты для лечения заболеваний костно-мышечной системы'),
+                   (10, 'N', 'Препараты для лечения заболеваний нервной системы'),
+                   (11, 'P', 'Противопаразитарные препараты, инсектициды и репелленты'),
+                   (12, 'R', 'Препараты для лечения заболеваний респираторной системы'),
+                   (13, 'S', 'Препараты для лечения заболеваний органов чувств'),
+                   (14, 'V', 'Прочие лекарственные препараты');
+        </sql>
+    </changeSet>
+    <changeSet id="datatest-2" author="Nastya Kachan" context="test">
+        <sql>
+            INSERT INTO region(region_id, name_region)
+            values (1, 'Минская область'),
+                   (2, 'Гродненская область'),
+                   (3, 'Брестская область'),
+                   (4, 'Гомельская область'),
+                   (5, 'Могилевская область'),
+                   (6, 'Витебская область');
+        </sql>
+    </changeSet>
+    <changeSet id="datatest-3" author="Nastya Kachan" context="test">
+        <sql>
+            INSERT INTO city(name_city, region_id)
+            values ('Минск', 1),
+                   ('Гродно', 2),
+                   ('Брест', 3),
+                   ('Гомель', 4),
+                   ('Могилев', 5),
+                   ('Витебск', 6);
+        </sql>
+    </changeSet>
+    <changeSet id="datatest-4" author="Nastya Kachan" context="test">
+        <sql>
+            insert into pharmacy_chain(chain_id, name_chain)
+            values (1, 'Фармин'),
+                   (2, 'Добрыя Леки'),
+                   (3, 'Ремедика');
+
+        </sql>
+    </changeSet>
+    <changeSet id="datatest-5" author="Nastya Kachan" context="test">
+        <sql>
+            insert into pharmacy(address, name_pharmacy, phone_number, working_hours, city_id, chain_id)
+            VALUES ('Кирова, 5', 'Фармин Аптека №1', '123-45-67', 'ПН-ПТ 8.00-23.00, СБ-ВС 10.00-18.00', 1, 1),
+                   ('Ванеева, 20', 'Добрыя Леки Аптека №1', '123-45-67', 'ПН-ПТ 8.00-23.00, СБ-ВС 10.00-18.00', 2, 2),
+                   ('Победителей, 5', 'Ремедика Аптека №1', '123-45-67', 'ПН-ПТ 8.00-23.00, СБ-ВС 10.00-18.00', 3, 3);
+
+        </sql>
+    </changeSet>
+    <changeSet id="datatest-6" author="Nastya Kachan" context="test">
+        <sql>
+            insert into producer(producer_id, name_producer, country)
+            VALUES (1, 'Байер', 'Германия'),
+                   (2, 'Нобель', 'Турция'),
+                   (3, 'КРКА', 'Словения'),
+                   (4, 'Астеллас', 'Нидерланды'),
+                   (5, 'Минскинтеркапс', 'Беларусь'),
+                   (6, 'Поль-Боскамп', 'Германия');
+        </sql>
+    </changeSet>
+    <changeSet id="datatest-7" author="Nastya Kachan" context="test">
+        <sql>
+            insert into mnn(mnn_id, mnn)
+            VALUES (1, 'ривароксабан'),
+                   (2, 'Левотироксин натрия'),
+                   (3, 'Фенибут'),
+                   (4, 'остеогенон'),
+                   (5, 'Фосфолипиды');
+        </sql>
+    </changeSet>
+    <changeSet id="datatest-8" author="Nastya Kachan" context="test">
+        <sql>
+            insert into product(product_id, count_available, drug_name, instruction, prescription, price,
+                                datetime_update,
+                                category_id, mnn_id, producer_id)
+            VALUES (1, 8, 'ксарелто таблетки 15мг N30', 'инструкция', 'RECEIPT', 95.60, '2022-07-20', 2, 1, 1),
+                   (2, 10, 'ксарелто таблетки 20мг N30', 'инструкция', 'RECEIPT', 98.70, '2022-07-20', 2, 1, 1),
+                   (3, 5, 'ксарелто таблетки 10мг N30', 'инструкция', 'RECEIPT', 84.50, '2022-07-20', 2, 1, 1),
+                   (4, 12, 'Фенибут таблетки 250мг N20', 'инструкция', 'NO_RECEIPT', 9.05, '2022-07-20', 10, 3, 3),
+                   (5, 2, 'Остеогенон таблетки 830мг N40', 'инструкция', 'NO_RECEIPT', 58.14, '2022-07-20', 2, 4, 6),
+                   (6, 1.5, 'Эссенцикапс капсулы 300мг N50', 'инструкция', 'NO_RECEIPT', 5.25, '2022-07-20', 2, 5, 5),
+                   (7, 7, 'ЭУТИРОКС таблетки 25мкг N100', 'инструкция', 'NO_RECEIPT', 7.50, '2022-07-20', 6, 2, 2);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Добавить товар</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/templatemo.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="/assets/css/fontawesome.min.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/assets/js/validationProduct.js}"></script>
+    <style>
+        /* Make the image fully responsive */
+        .carousel-inner img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+<th:block th:include="/blocks/header.html"/>
+
+<div style="text-align: center;">
+    <h2>Добавить товар</h2>
+</div>
+<div class="container">
+    <form>
+        <fieldset>
+            <legend>Аптеки</legend>
+            <div class="input-group mb-3">
+                <th:block th:if="${pharmaciesProduct == null}">
+                    <input type="text" class="form-control" disabled placeholder="Аптеки" aria-label="Аптеки"
+                           aria-describedby="button-addon1">
+                </th:block>
+                <th:block th:if="${pharmaciesProduct != null}">
+                    <th:block th:each="pharmacy : ${pharmaciesProduct}">
+                        <label>
+                            <input type="text" class="form-control" disabled="disabled"
+                                   th:placeholder="${pharmacy.namePharmacy} + ', ' + ${pharmacy.namePharmacy}
+                                   + ' ' + ${pharmacy.pharmacyChain.nameChain}"
+                                   aria-describedby="button-addon1">
+                        </label>
+                    </th:block>
+                </th:block>
+                <button class="btn btn-outline-info" type="submit" id="button-addon1"
+                        th:formaction="|@{/products/new_product/select_pharmacies}|">Выбрать
+                </button>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Производитель</legend>
+            <div class="input-group mb-3">
+                <th:block th:if="${producerProduct == null}">
+                    <input type="text" name="producer" class="form-control" disabled placeholder="Производитель"
+                           aria-label="Производитель"
+                           aria-describedby="button-addon3">
+                </th:block>
+                <th:block th:if="${producerProduct != null}">
+                    <label>
+                        <input type="text" class="form-control" disabled="disabled" th:placeholder="${producerProduct.name_producer}"
+                               aria-describedby="button-addon3">
+                    </label>
+                </th:block>
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon3"
+                        th:formaction="|@{/products/new_product/select_producer}|">Выбрать
+                </button>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Категория</legend>
+            <div class="input-group mb-3">
+                <th:block th:if="${categoryProduct == null}">
+                    <input type="text" name="category" class="form-control" disabled placeholder="Категория"
+                           aria-label="Категория"
+                           aria-describedby="button-addon3">
+                </th:block>
+                <th:block th:if="${categoryProduct != null}">
+                    <label>
+                        <input type="text" class="form-control" disabled="disabled" th:placeholder="${categoryProduct.title}"
+                               aria-describedby="button-addon3">
+                    </label>
+                </th:block>
+                <button class="btn btn-outline-info" type="submit" id="button-addon3"
+                        th:formaction="|@{/products/new_product/select_category}|">Выбрать
+                </button>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>МНН</legend>
+            <div class="input-group mb-3">
+                <th:block th:if="${mnnProduct == null}">
+                    <input type="text" name="mnn" class="form-control" disabled placeholder="МНН"
+                           aria-label="МНН"
+                           aria-describedby="button-addon3">
+                </th:block>
+                <th:block th:if="${mnnProduct != null}">
+                    <label>
+                        <input type="text" class="form-control" disabled="disabled" th:placeholder="${mnnProduct.mnn}"
+                               aria-describedby="button-addon3">
+                    </label>
+                </th:block>
+                <button class="btn btn-outline-info" type="submit" id="button-addon3"
+                        th:formaction="|@{/products/new_product/select_mnn}|">Выбрать
+                </button>
+            </div>
+        </fieldset>
+    </form>
+    <form name="bookForm" th:method="POST" th:action="@{/products/add_product}" onsubmit="return validateForm()">
+        <input type="hidden" name="pharmacies" th:value="${pharmaciesProduct}">
+        <th:block th:each="pharmacy : ${pharmaciesProduct}">
+            <input type="hidden" name="pharmaciesIds" th:value="${pharmacy.id}">
+        </th:block>
+
+        <input type="hidden" name="producer" th:value="${producerProduct}">
+        <th:block th:if="${producerProduct != null}">
+            <input type="hidden" name="producerId" th:value="${producerProduct.id}">
+        </th:block>
+
+        <input type="hidden" name="category" th:value="${categoryProduct}">
+        <th:block th:if="${categoryProduct != null}">
+            <input type="hidden" name="categoryId" th:value="${categoryProduct.id}">
+        </th:block>
+
+        <input type="hidden" name="mnn" th:value="${mnnProduct}">
+        <th:block th:if="${mnnProduct != null}">
+            <input type="hidden" name="mnnId" th:value="${mnnProduct.id}">
+        </th:block>
+        <fieldset>
+            <legend></legend>
+            <div class="mb-3">
+                <label for="drugNameInput" class="form-label">Название</label>
+                <input type="text" id="drugNameInput" name="drugName" class="form-control" placeholder="Название">
+            </div>
+            <div class="mb-3">
+                <label for="prescription" class="form-label">Порядок отпуска</label>
+                <select id="prescription" class="form-select" th:field="*{prescription}">
+                    <option th:each="pr : ${prescription}"
+                            th:text="${pr.value}"
+                            th:value="${pr}">
+                    </option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="instructionInput" class="form-label">Инструкция</label>
+                <input type="text" id="instructionInput" name="instruction" class="form-control" placeholder="Инструкция">
+            </div>
+            <div class="mb-3">
+                <label for="priceInput" class="form-label">Цена</label>
+                <input type="text" id="priceInput" name="price" class="form-control" placeholder="Цена">
+            </div>
+            <div class="mb-3">
+                <label for="countInput" class="form-label">Количество</label>
+                <input type="text" id="countInput" name="count" class="form-control" placeholder="Количество">
+            </div>
+        </fieldset>
+        <button type="submit" class="btn btn-outline-info">Сохранить</button>
+    </form>
+    <p>
+    <div style="text-align: center;">
+        <form th:action="@{/products}">
+            <button type="submit" class="btn btn-secondary">Назад</button>
+        </form>
+    </div>
+    <p>
+</div>
+<div class="wrapper flex-grow-1">
+</div>
+<p>
+
+    <th:block th:include="/blocks/footer.html"/>
+    <script src="/assets/js/jquery-1.11.0.min.js"></script>
+    <script src="/assets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/templatemo.js"></script>
+    <script src="/assets/js/custom.js"></script>
+</body>
+
+</html>
