@@ -4,7 +4,12 @@ import by.academy.pharmacy_spring_boot.dto.RegionDto;
 import by.academy.pharmacy_spring_boot.entity.Region;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
-public interface RegionMapper extends AbstractMapper<Region, RegionDto> {
+import javax.xml.validation.Validator;
 
+@Mapper(componentModel = "spring", uses = {Validator.class})
+public interface RegionMapper {
+
+    Region toEntity(RegionDto regionDto);
+
+    RegionDto toDto(Region region);
 }

@@ -7,17 +7,14 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface ProducerService {
+    Page<ProducerDto> findProducerWithPaginated(ProducerFilter producerFilter, int numberPage, int size, String sortField,
+                                                String sortDir);
 
     List<ProducerDto> findAllProducers();
 
-    Page<ProducerDto> findAllProducersWithPaginated(ProducerFilter producerFilter, int numberPage, int size, String sortField,
-                                                    String sortDir);
-
     ProducerDto findProducerById(Integer id);
 
-    void createProducer(ProducerDto producerDto);
-
-    void updateProducer(ProducerDto producerDto);
+    void saveProducer(ProducerDto producerDto);
 
     void deleteProducerById(Integer id);
 }

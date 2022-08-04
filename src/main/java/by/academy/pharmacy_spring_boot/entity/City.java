@@ -9,7 +9,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,11 +24,11 @@ public class City {
     @Column(name = "name_city")
     private String nameCity;
 
-    @OneToMany(mappedBy = "city")
+    @OneToMany(mappedBy = "city", cascade = CascadeType.MERGE)
     @ToString.Exclude
     private List<Pharmacy> pharmacies = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "region_id")
     private Region region;
 
@@ -38,11 +37,19 @@ public class City {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         City city = (City) o;
-        return Objects.equals(id, city.id);
+        return Objects.equals(id, city.id) && Objects.equals(nameCity, city.nameCity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, nameCity);
+    }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "id=" + id +
+                ", nameCity='" + nameCity + '\'' +
+                '}';
     }
 }

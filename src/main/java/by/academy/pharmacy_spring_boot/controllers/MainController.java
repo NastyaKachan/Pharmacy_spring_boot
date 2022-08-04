@@ -6,12 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static by.academy.pharmacy_spring_boot.constants.Constants.HOME;
+import static by.academy.pharmacy_spring_boot.constants.Constants.HOME_PAGE;
+
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/")
+@RequestMapping(HOME_PAGE)
 public class MainController {
-
-    public static final String HOME = "home";
 
     @GetMapping
 

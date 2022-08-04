@@ -9,7 +9,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,15 +33,15 @@ public class Pharmacy {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "chain_id")
     private PharmacyChain pharmacyChain;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_id")
     private City city;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "pharmacy_product",
             joinColumns = @JoinColumn(name = "pharmacy_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
@@ -54,11 +53,22 @@ public class Pharmacy {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pharmacy pharmacy = (Pharmacy) o;
-        return Objects.equals(id, pharmacy.id);
+        return Objects.equals(id, pharmacy.id) && Objects.equals(namePharmacy, pharmacy.namePharmacy) && Objects.equals(address, pharmacy.address) && Objects.equals(workingHours, pharmacy.workingHours) && Objects.equals(phoneNumber, pharmacy.phoneNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, namePharmacy, address, workingHours, phoneNumber);
+    }
+
+    @Override
+    public String toString() {
+        return "Pharmacy{" +
+                "id=" + id +
+                ", namePharmacy='" + namePharmacy + '\'' +
+                ", address='" + address + '\'' +
+                ", workingHours='" + workingHours + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }

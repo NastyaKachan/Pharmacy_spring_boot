@@ -1,16 +1,14 @@
 package by.academy.pharmacy_spring_boot.services.implement;
 
 import by.academy.pharmacy_spring_boot.dto.MnnDto;
-import by.academy.pharmacy_spring_boot.dto.ProducerDto;
+import by.academy.pharmacy_spring_boot.dto.ProductDto;
 import by.academy.pharmacy_spring_boot.entity.MNN;
-import by.academy.pharmacy_spring_boot.entity.Producer;
 import by.academy.pharmacy_spring_boot.filters.MnnFilter;
-import by.academy.pharmacy_spring_boot.filters.ProducerFilter;
 import by.academy.pharmacy_spring_boot.mapper.MnnMapper;
+import by.academy.pharmacy_spring_boot.mapper.ProductMapper;
 import by.academy.pharmacy_spring_boot.repository.MnnRepository;
 import by.academy.pharmacy_spring_boot.services.interfaces.MnnService;
 import by.academy.pharmacy_spring_boot.specifications.MnnSpecification;
-import by.academy.pharmacy_spring_boot.specifications.ProducerSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +27,7 @@ import java.util.stream.Collectors;
 public class MnnServiceImpl implements MnnService {
 
     private final MnnMapper mnnMapper;
+    private final ProductMapper productMapper;
     private final MnnRepository mnnRepository;
 
     @Override
@@ -45,6 +45,15 @@ public class MnnServiceImpl implements MnnService {
     }
 
     @Override
+    @Transactional
+    public List<ProductDto> findProductWithMnn(Integer mnnId) {
+        return mnnRepository.findProductsWithMnn(mnnId)
+                .stream()
+                .map(productMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<MnnDto> findAllMnn() {
         return mnnRepository.findAll()
                 .stream()
@@ -54,18 +63,11 @@ public class MnnServiceImpl implements MnnService {
 
     @Override
     public MnnDto findMnnById(Integer id) {
-        return mnnRepository.findById(id)
-                .map(mnnMapper::toDto)
-                .orElse(null);
+        return mnnMapper.toDto(mnnRepository.findById(id).orElse(null));
     }
 
     @Override
-    public void createMnn(MnnDto mnnDto) {
-        mnnRepository.save(mnnMapper.toEntity(mnnDto));
-    }
-
-    @Override
-    public void updateMnn(MnnDto mnnDto) {
+    public void saveMnn(MnnDto mnnDto) {
         mnnRepository.save(mnnMapper.toEntity(mnnDto));
     }
 

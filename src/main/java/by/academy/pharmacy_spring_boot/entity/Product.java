@@ -11,7 +11,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,19 +42,19 @@ public class Product {
     @Column(name = "datetime_update")
     private Date datetimeUpdate;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "producer_id")
     private Producer producer;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "mnn_id")
     private MNN mnn;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "pharmacy_product",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "pharmacy_id"))
@@ -67,11 +66,24 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Objects.equals(id, product.id);
+        return Objects.equals(id, product.id) && Objects.equals(drugName, product.drugName) && prescription == product.prescription && Objects.equals(instruction, product.instruction) && Objects.equals(price, product.price) && Objects.equals(countAvailable, product.countAvailable) && Objects.equals(datetimeUpdate, product.datetimeUpdate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, drugName, prescription, instruction, price, countAvailable, datetimeUpdate);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", drugName='" + drugName + '\'' +
+                ", prescription=" + prescription +
+                ", instruction='" + instruction + '\'' +
+                ", price=" + price +
+                ", countAvailable=" + countAvailable +
+                ", datetimeUpdate=" + datetimeUpdate +
+                '}';
     }
 }

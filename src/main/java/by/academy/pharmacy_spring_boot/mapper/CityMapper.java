@@ -4,7 +4,12 @@ import by.academy.pharmacy_spring_boot.dto.CityDto;
 import by.academy.pharmacy_spring_boot.entity.City;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
-public interface CityMapper extends AbstractMapper<City, CityDto> {
+import javax.xml.validation.Validator;
 
+@Mapper(componentModel = "spring", uses = {PharmacyMapper.class, RegionMapper.class, Validator.class})
+public interface CityMapper {
+
+    City toEntity(CityDto cityDto);
+
+    CityDto toDto(City city);
 }

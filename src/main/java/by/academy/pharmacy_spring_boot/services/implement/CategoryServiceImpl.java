@@ -1,9 +1,11 @@
 package by.academy.pharmacy_spring_boot.services.implement;
 
 import by.academy.pharmacy_spring_boot.dto.CategoryDto;
+import by.academy.pharmacy_spring_boot.dto.ProductDto;
 import by.academy.pharmacy_spring_boot.entity.Category;
 import by.academy.pharmacy_spring_boot.filters.CategoryFilter;
 import by.academy.pharmacy_spring_boot.mapper.CategoryMapper;
+import by.academy.pharmacy_spring_boot.mapper.ProductMapper;
 import by.academy.pharmacy_spring_boot.repository.CategoryRepository;
 import by.academy.pharmacy_spring_boot.services.interfaces.CategoryService;
 import by.academy.pharmacy_spring_boot.specifications.CategorySpecification;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryMapper categoryMapper;
+    private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
 
     @Override
@@ -50,18 +54,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto findCategoryById(Integer id) {
-        return categoryRepository.findById(id)
-                .map(categoryMapper::toDto)
-                .orElse(null);
+        return categoryMapper.toDto(categoryRepository.findById(id).orElse(null));
     }
 
     @Override
-    public void createCategory(CategoryDto categoryDto) {
-        categoryRepository.save(categoryMapper.toEntity(categoryDto));
+    @Transactional
+    public List<ProductDto> findProductOfCategory(Integer categoryId) {
+        return categoryRepository.findProductOfCategory(categoryId)
+                .stream()
+                .map(productMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void updateCategory(CategoryDto categoryDto) {
+    public void saveCategory(CategoryDto categoryDto) {
         categoryRepository.save(categoryMapper.toEntity(categoryDto));
     }
 

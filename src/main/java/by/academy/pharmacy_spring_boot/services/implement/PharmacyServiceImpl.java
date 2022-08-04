@@ -1,9 +1,11 @@
 package by.academy.pharmacy_spring_boot.services.implement;
 
 import by.academy.pharmacy_spring_boot.dto.PharmacyDto;
+import by.academy.pharmacy_spring_boot.dto.ProductDto;
 import by.academy.pharmacy_spring_boot.entity.Pharmacy;
 import by.academy.pharmacy_spring_boot.filters.PharmacyFilter;
 import by.academy.pharmacy_spring_boot.mapper.PharmacyMapper;
+import by.academy.pharmacy_spring_boot.mapper.ProductMapper;
 import by.academy.pharmacy_spring_boot.repository.PharmacyRepository;
 import by.academy.pharmacy_spring_boot.services.interfaces.PharmacyService;
 import by.academy.pharmacy_spring_boot.specifications.PharmacySpecification;
@@ -14,9 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 public class PharmacyServiceImpl implements PharmacyService {
 
     private final PharmacyMapper pharmacyMapper;
+    private final ProductMapper productMapper;
     private final PharmacyRepository pharmacyRepository;
 
     @Override
@@ -43,6 +45,15 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
+    @Transactional
+    public List<ProductDto> findProductsOfPharmacy(Integer pharmacyId) {
+        return pharmacyRepository.findProductsOfPharmacy(pharmacyId)
+                .stream()
+                .map(productMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<PharmacyDto> findAllPharmacies() {
         return pharmacyRepository.findAll()
                 .stream()
@@ -51,29 +62,12 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    public List<PharmacyDto> findPharmaciesByIds(Integer[] pharmaciesIds) {
-        List<Integer> listPharmacies = new ArrayList<>();
-        Collections.addAll(listPharmacies, pharmaciesIds);
-        return pharmacyRepository.findAllById(listPharmacies)
-                .stream()
-                .map(pharmacyMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public PharmacyDto findPharmacyById(Integer id) {
-        return pharmacyRepository.findById(id)
-                .map(pharmacyMapper::toDto)
-                .orElse(null);
+        return pharmacyMapper.toDto(pharmacyRepository.findById(id).orElse(null));
     }
 
     @Override
-    public void createPharmacy(PharmacyDto pharmacyDto) {
-        pharmacyRepository.save(pharmacyMapper.toEntity(pharmacyDto));
-    }
-
-    @Override
-    public void updatePharmacy(PharmacyDto pharmacyDto) {
+    public void savePharmacy(PharmacyDto pharmacyDto) {
         pharmacyRepository.save(pharmacyMapper.toEntity(pharmacyDto));
     }
 

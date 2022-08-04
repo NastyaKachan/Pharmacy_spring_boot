@@ -9,7 +9,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,7 +27,7 @@ public class Producer {
     @Column(name = "country")
     private String country;
 
-    @OneToMany(mappedBy = "producer")
+    @OneToMany(mappedBy = "producer", cascade = CascadeType.MERGE)
     @ToString.Exclude
     private List<Product> products = new ArrayList<>();
 
@@ -37,11 +36,20 @@ public class Producer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Producer producer = (Producer) o;
-        return Objects.equals(id, producer.id);
+        return Objects.equals(id, producer.id) && Objects.equals(name_producer, producer.name_producer) && Objects.equals(country, producer.country);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name_producer, country);
+    }
+
+    @Override
+    public String toString() {
+        return "Producer{" +
+                "id=" + id +
+                ", name_producer='" + name_producer + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
 }

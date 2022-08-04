@@ -26,7 +26,7 @@
 </div>
 <div class="collapsing" id="collapseFilters">
     <div class="card card-body">
-        <form class="row g-3" th:action="@{'/pharmacy-chain/page/' + ${currentPage}}">
+        <form class="row g-3" th:action="@{'/pharmacy/page/' + ${currentPage}}">
             <div class="col-md-4 mb-3" style="align-content: center">
                 <label for="nameFilter" class="form-label">Название</label>
                 <input type="text" id="nameFilter" name="nameFilter" class="form-control"
@@ -44,42 +44,90 @@
     </div>
 </div>
 <div class="w-90 p-3">
-    <form th:action="@{/pharmacy-chain/chain-create}">
-        <button type="submit" class="btn btn-outline-info">Добавить аптечную сеть</button>
+    <form th:action="@{/pharmacy/pharmacy-create}">
+        <button type="submit" class="btn btn-outline-info">Добавить аптеку</button>
     </form>
 </div>
 <div class="w-90 p-3" style="text-align: center;">
     <div th:if="${#authorization.expression('isAuthenticated()')}" class="text fw-light fs-6 lh-1">
     </div>
-    <div th:switch="${pharmacyChainDtoList}">
-        <h2 th:case="null">Добавьте аптечную сеть</h2>
+    <div th:switch="${pharmacyDtoList}">
+        <h2 th:case="null">Добавьте аптеку</h2>
         <div th:case="*">
-            <h2>Аптечные сети</h2>
+            <h2>Аптеки</h2>
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
                     <th scope="col" class="align-middle">
                         <th:block
                                 th:if="${nameFilter != null}">
-                            <a th:href="@{'/pharmacy-chain/page/' + ${currentPage} + '?nameFilter=' + ${nameFilter} +
+                            <a th:href="@{'/pharmacy/page/' + ${currentPage} + '?nameFilter=' + ${nameFilter} +
                             '&size=' + ${size} + '&sortField=id&sortDir=' + ${reverseSortDir}}">№</a>
                         </th:block>
                         <th:block
                                 th:if="${nameFilter == null}">
-                            <a th:href="@{'/pharmacy-chain/page/' + ${currentPage} + '?size=' + ${size} +
+                            <a th:href="@{'/pharmacy/page/' + ${currentPage} + '?size=' + ${size} +
                             '&sortField=id&sortDir=' + ${reverseSortDir}}">№</a>
                         </th:block>
                     </th>
                     <th scope="col" class="align-middle">
                         <th:block
                                 th:if="${nameFilter != null}">
-                            <a th:href="@{'/pharmacy-chain/page/' + ${currentPage} + '?nameFilter=' + ${nameFilter} +
-                            '&size=' + ${size} + '&sortField=nameChain&sortDir=' + ${reverseSortDir}}">Название</a>
+                            <a th:href="@{'/pharmacy/page/' + ${currentPage} + '?nameFilter=' + ${nameFilter} +
+                            '&size=' + ${size} + '&sortField=namePharmacy&sortDir=' + ${reverseSortDir}}">Название</a>
                         </th:block>
                         <th:block
                                 th:if="${nameFilter == null}">
-                            <a th:href="@{'/pharmacy-chain/page/' + ${currentPage} + '?size=' + ${size} +
-                            '&sortField=nameChain&sortDir=' + ${reverseSortDir}}">Название</a>
+                            <a th:href="@{'/pharmacy/page/' + ${currentPage} + '?size=' + ${size} +
+                            '&sortField=namePharmacy&sortDir=' + ${reverseSortDir}}">Название</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${nameFilter != null}">
+                            <a th:href="@{'/pharmacy/page/' + ${currentPage} + '?nameFilter=' + ${nameFilter} +
+                            '&size=' + ${size} + '&sortField=city.nameCity&sortDir=' + ${reverseSortDir}}">Город</a>
+                        </th:block>
+                        <th:block
+                                th:if="${nameFilter == null}">
+                            <a th:href="@{'/pharmacy/page/' + ${currentPage} + '?size=' + ${size} +
+                            '&sortField=city.nameCity&sortDir=' + ${reverseSortDir}}">Город</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${nameFilter != null}">
+                            <a th:href="@{'/pharmacy/page/' + ${currentPage} + '?nameFilter=' + ${nameFilter} +
+                            '&size=' + ${size} + '&sortField=address&sortDir=' + ${reverseSortDir}}">Адрес</a>
+                        </th:block>
+                        <th:block
+                                th:if="${nameFilter == null}">
+                            <a th:href="@{'/pharmacy/page/' + ${currentPage} + '?size=' + ${size} +
+                            '&sortField=address&sortDir=' + ${reverseSortDir}}">Адрес</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${nameFilter != null}">
+                            <a th:href="@{'/pharmacy/page/' + ${currentPage} + '?nameFilter=' + ${nameFilter} +
+                            '&size=' + ${size} + '&sortField=phoneNumber&sortDir=' + ${reverseSortDir}}">Телефон</a>
+                        </th:block>
+                        <th:block
+                                th:if="${nameFilter == null}">
+                            <a th:href="@{'/pharmacy/page/' + ${currentPage} + '?size=' + ${size} +
+                            '&sortField=phoneNumber&sortDir=' + ${reverseSortDir}}">Телефон</a>
+                        </th:block>
+                    </th>
+                    <th scope="col" class="align-middle">
+                        <th:block
+                                th:if="${nameFilter != null}">
+                            <a th:href="@{'/pharmacy/page/' + ${currentPage} + '?nameFilter=' + ${nameFilter} +
+                            '&size=' + ${size} + '&sortField=workingHours&sortDir=' + ${reverseSortDir}}">Время работы</a>
+                        </th:block>
+                        <th:block
+                                th:if="${nameFilter == null}">
+                            <a th:href="@{'/pharmacy/page/' + ${currentPage} + '?size=' + ${size} +
+                            '&sortField=workingHours&sortDir=' + ${reverseSortDir}}">Время работы</a>
                         </th:block>
                     </th>
 
@@ -87,33 +135,37 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="chain : ${pharmacyChainDtoList}">
-                    <td th:text="${chain.id}"></td>
-                    <td th:text="${chain.nameChain}"></td>
+                <tr th:each="pharmacy : ${pharmacyDtoList}">
+                    <td th:text="${pharmacy.id}"></td>
+                    <td th:text="${pharmacy.namePharmacy}"></td>
+                    <td th:text="${pharmacy.city.nameCity}"></td>
+                    <td th:text="${pharmacy.address}"></td>
+                    <td th:text="${pharmacy.phoneNumber}"></td>
+                    <td th:text="${pharmacy.workingHours}"></td>
                     <td>
                         <form th:method="get"
-                              th:action="@{/pharmacy-chain/pharmacy-in-chain/{id}(id=${chain.id})}">
-                            <button type="submit" class="btn btn-outline-info">Список аптек сети</button>
+                              th:action="@{/pharmacy/products-in-pharmacy/{id}(id=${pharmacy.id})}">
+                            <button type="submit" class="btn btn-outline-info">Ассортимент аптеки</button>
                         </form>
                     </td>
                     <td>
                         <form th:method="get"
-                              th:action="@{/pharmacy-chain/chain-edit/{id}(id=${chain.id})}">
+                              th:action="@{/pharmacy/pharmacy-edit/{id}(id=${pharmacy.id})}">
                             <button type="submit" class="btn btn-outline-info">Редактировать</button>
                         </form>
                     <td>
                     <form th:method="post"
-                          th:action="@{/pharmacy-chain/delete/{id}(id=${chain.id})}">
+                          th:action="@{/pharmacy/delete/{id}(id=${pharmacy.id})}">
                         <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
                                 data-bs-target="#deleteChainModal"
-                                th:attr="data-bs-target='#deleteChainModal' + ${chain.id}">Удалить
+                                th:attr="data-bs-target='#deleteChainModal' + ${pharmacy.id}">Удалить
                         </button>
-                        <div class="modal modal-delete" th:id="deleteChainModal + ${chain.id}" tabindex="-1"
+                        <div class="modal modal-delete" th:id="deleteChainModal + ${pharmacy.id}" tabindex="-1"
                              aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteChainModal">Удаление аптечной сети</h5>
+                                        <h5 class="modal-title" id="deleteChainModal">Удаление аптеки</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Закрыть"></button>
                                     </div>
@@ -142,7 +194,7 @@
         <th:block
                 th:if="${nameFilter != null}">
             <form
-                    th:action="@{'/pharmacy-chain/page/' + ${currentPage} + '?nameFilter=' + ${nameFilter}
+                    th:action="@{'/pharmacy/page/' + ${currentPage} + '?nameFilter=' + ${nameFilter}
                      + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${reverseSortDir}}">
                 <div th:if="${size == 5}">
                     <label>Наименований на странице:
@@ -173,7 +225,7 @@
         </th:block>
         <th:block
                 th:if="${nameFilter == null}">
-            <form th:action="@{'/pharmacy-chain/page/'+ ${currentPage} + '?size=' + ${size} + '&sortField=' +
+            <form th:action="@{'/pharmacy/page/'+ ${currentPage} + '?size=' + ${size} + '&sortField=' +
                                 ${sortField} + '&sortDir=' + ${sortDir}}">
                 <div th:if="${size == 5}">
                     <label>Наименований на странице:
@@ -208,7 +260,7 @@
             <th:block
                     th:if="${nameFilter != null}">
                 <a class="page-link btn-outline-info" th:if="${currentPage > 1}"
-                   th:href="@{'/pharmacy-chain/page/' + ${1} + '?nameFilter=' + ${nameFilter} +
+                   th:href="@{'/pharmacy/page/' + ${1} + '?nameFilter=' + ${nameFilter} +
                    '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Первая
                 </a>
                 <span class="btn btn-outline-info" th:unless="${currentPage > 1}">Первая</span>
@@ -216,7 +268,7 @@
             <th:block
                     th:if="${nameFilter == null}">
                 <a class="page-link btn-outline-info" th:if="${currentPage > 1}"
-                   th:href="@{'/pharmacy-chain/page/'+ ${1} + '?size=' + ${size} + '&sortField=' +
+                   th:href="@{'/pharmacy/page/'+ ${1} + '?size=' + ${size} + '&sortField=' +
                    ${sortField} + '&sortDir=' + ${sortDir}}">Первая
                 </a>
                 <span class="btn btn-outline-info" th:unless="${currentPage > 1}">Первая</span>
@@ -226,7 +278,7 @@
             <th:block
                     th:if="${nameFilter != null}">
                 <a class="page-link btn-outline-info" th:if="${currentPage > 1}"
-                   th:href="@{'/pharmacy-chain/page/' + ${currentPage - 1} + '?nameFilter=' + ${nameFilter} +
+                   th:href="@{'/pharmacy/page/' + ${currentPage - 1} + '?nameFilter=' + ${nameFilter} +
                    '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -235,7 +287,7 @@
             <th:block
                     th:if="${nameFilter == null}">
                 <a class="page-link btn-outline-info" th:if="${currentPage > 1}"
-                   th:href="@{'/pharmacy-chain/page/' + ${currentPage - 1} + '?size=' + ${size} +
+                   th:href="@{'/pharmacy/page/' + ${currentPage - 1} + '?size=' + ${size} +
                    '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -247,7 +299,7 @@
                     th:if="${nameFilter != null}">
             <span th:each="i: ${#numbers.sequence(1, totalPages)}">
         <a class="btn btn-info" th:if="${i != currentPage}"
-           th:href="@{'/pharmacy-chain/page/' + ${i} + '?nameFilter=' + ${nameFilter} +
+           th:href="@{'/pharmacy/page/' + ${i} + '?nameFilter=' + ${nameFilter} +
            '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]
         </a>
         <span class="btn btn-info" th:unless="${i != currentPage}">[[${i}]]</span>
@@ -257,7 +309,7 @@
                     th:if="${nameFilter == null}">
             <span th:each="i: ${#numbers.sequence(1, totalPages)}">
         <a class="btn btn-info" th:if="${i != currentPage}"
-           th:href="@{'/pharmacy-chain/page/' + ${i} + '?size=' + ${size} + '&sortField=' + ${sortField} +
+           th:href="@{'/pharmacy/page/' + ${i} + '?size=' + ${size} + '&sortField=' + ${sortField} +
            '&sortDir=' + ${sortDir}}">[[${i}]]
         </a>
         <span class="btn btn-info" th:unless="${i != currentPage}">[[${i}]]</span>
@@ -268,7 +320,7 @@
             <th:block
                     th:if="${nameFilter != null}">
                 <a class="page-link btn-outline-info" th:if="${currentPage < totalPages}"
-                   th:href="@{'/pharmacy-chain/page/' + ${currentPage + 1} + '?nameFilter=' + ${nameFilter} +
+                   th:href="@{'/pharmacy/page/' + ${currentPage + 1} + '?nameFilter=' + ${nameFilter} +
                    '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
@@ -277,7 +329,7 @@
             <th:block
                     th:if="${nameFilter == null}">
                 <a class="page-link btn-outline-info" th:if="${currentPage < totalPages}"
-                   th:href="@{'/pharmacy-chain/page/' + ${currentPage + 1} + '?size=' + ${size} +
+                   th:href="@{'/pharmacy/page/' + ${currentPage + 1} + '?size=' + ${size} +
                    '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
@@ -288,7 +340,7 @@
             <th:block
                     th:if="${nameFilter != null}">
                 <a class="page-link btn-outline-info" th:if="${currentPage < totalPages}"
-                   th:href="@{'/pharmacy-chain/page/' + ${totalPages} + '?nameFilter=' + ${nameFilter} +
+                   th:href="@{'/pharmacy/page/' + ${totalPages} + '?nameFilter=' + ${nameFilter} +
                    '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Последняя
                 </a>
                 <span class="btn btn-outline-info" th:unless="${currentPage < totalPages}">Последняя</span>
@@ -296,7 +348,7 @@
             <th:block
                     th:if="${nameFilter == null}">
                 <a class="page-link btn-outline-info" th:if="${currentPage < totalPages}"
-                   th:href="@{'/pharmacy-chain/page/' + ${totalPages} + '?size=' + ${size} +
+                   th:href="@{'/pharmacy/page/' + ${totalPages} + '?size=' + ${size} +
                    '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Последняя
                 </a>
                 <span class="btn btn-outline-info" th:unless="${currentPage < totalPages}">Последняя</span>

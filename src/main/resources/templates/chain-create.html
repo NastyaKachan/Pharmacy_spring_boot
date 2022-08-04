@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Pharmacy</title>
+    <title>Add chain</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -31,7 +31,31 @@
 <body>
 <th:block th:include="/blocks/header.html"/>
 
+<div style="text-align: center;">
+    <h2>Создать аптечную сеть</h2>
+</div>
+<div class="container">
+    <form name="chainForm" th:method="POST" th:action="@{/pharmacy-chain/chain-create}">
 
+        <fieldset>
+            <div class="mb-3">
+                <label for="nameChain" class="form-label">Название аптечной сети</label>
+                <input type="text" id="nameChain" name="nameChain" class="form-control" placeholder="Название аптечной сети">
+            </div>
+        </fieldset>
+        <button type="submit" class="btn btn-outline-info">Сохранить</button>
+    </form>
+    <p>
+    <div style="text-align: center;">
+        <form th:action="@{/pharmacy-chain}">
+            <button type="submit" class="btn btn-info">Назад</button>
+        </form>
+    </div>
+    <p>
+</div>
+<div class="wrapper flex-grow-1">
+</div>
+<p>
 
 <th:block th:include="/blocks/footer.html"/>
 <script src="/assets/js/jquery-1.11.0.min.js"></script>

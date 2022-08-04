@@ -1,6 +1,7 @@
 package by.academy.pharmacy_spring_boot.services.interfaces;
 
 import by.academy.pharmacy_spring_boot.dto.CategoryDto;
+import by.academy.pharmacy_spring_boot.dto.ProductDto;
 import by.academy.pharmacy_spring_boot.filters.CategoryFilter;
 import org.springframework.data.domain.Page;
 
@@ -14,9 +15,9 @@ public interface CategoryService {
 
     CategoryDto findCategoryById(Integer id);
 
-    void createCategory(CategoryDto categoryDto);
+    List<ProductDto> findProductOfCategory(Integer categoryId);
 
-    void updateCategory(CategoryDto categoryDto);
+    void saveCategory(CategoryDto categoryDto);
 
     void deleteCategoryById(Integer id);
 }

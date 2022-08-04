@@ -9,7 +9,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,10 +21,10 @@ public class Region {
     @Column(name = "region_id")
     private Integer id;
 
-    @Column(name = "name_region")
+    @Column(name = "name_region", unique = true)
     private String nameRegion;
 
-    @OneToMany(mappedBy = "region")
+    @OneToMany(mappedBy = "region", cascade = CascadeType.MERGE)
     @ToString.Exclude
     private List<City> cities = new ArrayList<>();
 
@@ -34,11 +33,19 @@ public class Region {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Region region = (Region) o;
-        return Objects.equals(id, region.id);
+        return Objects.equals(id, region.id) && Objects.equals(nameRegion, region.nameRegion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, nameRegion);
+    }
+
+    @Override
+    public String toString() {
+        return "Region{" +
+                "id=" + id +
+                ", nameRegion='" + nameRegion + '\'' +
+                '}';
     }
 }

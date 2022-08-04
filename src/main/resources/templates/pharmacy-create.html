@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Add pharmacy</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/templatemo.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="/assets/css/fontawesome.min.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <style>
+        /* Make the image fully responsive */
+        .carousel-inner img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+<th:block th:include="/blocks/header.html"/>
+
+<div style="text-align: center;">
+    <h2>Создать аптеку</h2>
+</div>
+<div class="container">
+    <form>
+        <fieldset>
+            <legend>Город</legend>
+            <div class="input-group mb-3">
+                <th:block th:if="${cityDto == null}">
+                    <input type="text" name="city" class="form-control" disabled placeholder="Город"
+                           aria-label="Город"
+                           aria-describedby="button-addon3">
+                </th:block>
+                <th:block th:if="${cityDto != null}">
+                    <label>
+                        <input type="text" class="form-control" disabled="disabled"
+                               th:placeholder="${cityDto.nameCity}"
+                               aria-describedby="button-addon3">
+                    </label>
+                </th:block>
+                <button class="btn btn-outline-info" type="submit" id="button-addon3"
+                        th:formaction="|@{/pharmacy/pharmacy-create/pharmacy-city}|">...
+                </button>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Аптечная сеть</legend>
+            <div class="input-group mb-3">
+                <th:block th:if="${chainDto == null}">
+                    <input type="text" name="chain" class="form-control" disabled placeholder="Аптечная сеть"
+                           aria-label="Аптечная сеть"
+                           aria-describedby="button-addon3">
+                </th:block>
+                <th:block th:if="${chainDto != null}">
+                    <label>
+                        <input type="text" class="form-control" disabled="disabled"
+                               th:placeholder="${chainDto.nameChain}"
+                               aria-describedby="button-addon3">
+                    </label>
+                </th:block>
+                <button class="btn btn-outline-info" type="submit" id="button-addon3"
+                        th:formaction="|@{/pharmacy/pharmacy-create/pharmacy-chains}|">...
+                </button>
+            </div>
+        </fieldset>
+    </form>
+    <form name="pharmacyForm" th:method="POST" th:action="@{/pharmacy/pharmacy-create}">
+        <input type="hidden" name="city" th:value="${cityDto}">
+        <th:block th:if="${cityDto != null}">
+            <input type="hidden" name="cityId" th:value="${cityDto.id}">
+        </th:block>
+        <input type="hidden" name="chain" th:value="${chainDto}">
+        <th:block th:if="${chainDto != null}">
+            <input type="hidden" name="chainId" th:value="${chainDto.id}">
+        </th:block>
+        <fieldset>
+            <div class="mb-3">
+                <label for="namePharmacy" class="form-label">Название</label>
+                <input type="text" id="namePharmacy" name="namePharmacy" class="form-control" placeholder="Название">
+            </div>
+            <div class="mb-3">
+                <label for="addressPharmacy" class="form-label">Адрес</label>
+                <input type="text" id="addressPharmacy" name="addressPharmacy" class="form-control" placeholder="Адрес">
+            </div>
+            <div class="mb-3">
+                <label for="phonePharmacy" class="form-label">Телефон</label>
+                <input type="text" id="phonePharmacy" name="phonePharmacy" class="form-control" placeholder="Телефон">
+            </div>
+            <div class="mb-3">
+                <label for="timePharmacy" class="form-label">Время работы</label>
+                <input type="text" id="timePharmacy" name="timePharmacy" class="form-control" placeholder="Время работы">
+            </div>
+
+        </fieldset>
+        <button type="submit" class="btn btn-outline-info">Сохранить</button>
+    </form>
+    <p>
+    <div style="text-align: center;">
+        <form th:action="@{/pharmacy}">
+            <button type="submit" class="btn btn-info">Назад</button>
+        </form>
+    </div>
+    <p>
+</div>
+<div class="wrapper flex-grow-1">
+</div>
+<p>
+
+    <th:block th:include="/blocks/footer.html"/>
+    <script src="/assets/js/jquery-1.11.0.min.js"></script>
+    <script src="/assets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/templatemo.js"></script>
+    <script src="/assets/js/custom.js"></script>
+</body>
+
+</html>

@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import java.util.Date;
 import java.util.List;
+
+import static by.academy.pharmacy_spring_boot.constants.Constants.*;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes(value = {"producerDtoList", "mnnDtoList", "categoryDtoList", "pharmacyDtoList", "page", "size", "sortField", "sortDir"})
+@SessionAttributes(value = {ProductController.PRODUCER_DTO_LIST, ProductController.MNN_DTO_LIST, ProductController.CATEGORY_DTO_LIST, ProductController.PHARMACY_DTO_LIST,
+        ProductController.PAGE, SIZE, SORT_FIELD, SORT_DIR})
 public class ProductController {
     public static final int NUMBER_PAGE = 1;
     public static final int SIZE = 5;
@@ -52,6 +54,51 @@ public class ProductController {
     public static final String MNN_DTO1 = "mnnDto";
     public static final String CATEGORY_DTO1 = "categoryDto";
     public static final String PHARMACY_DTO_LIST2 = "pharmacyDtoList";
+    public static final String PRODUCER_DTO_LIST = "producerDtoList";
+    public static final String PAGE = "page";
+    public static final String PRODUCTS = "/products";
+    public static final String PRODUCTS_PAGE_NUMBER_PAGE = "/products/page/{numberPage}";
+    public static final String NUMBER_PAGE3 = "numberPage";
+    public static final String PRODUCTS_ADD_PRODUCT = "/products/add_product";
+    public static final String PRESCRIPTION = "prescription";
+    public static final String ADD_PRODUCT = "add_product";
+    public static final String PRODUCTS_ADD_PRODUCT_SELECT_PRODUCER = "/products/add_product/select_producer";
+    public static final String PRODUCTS_ADD_PRODUCT_SELECT_PRODUCER_PAGE_NUMBER_PAGE = "/products/add_product/select_producer/page/{numberPage}";
+    public static final String ADD_PRODUCT_PRODUCER = "add_product-producer";
+    public static final String PRODUCTS_ADD_PRODUCT_SELECT_PRODUCER_SAVE = "/products/add_product/select_producer/save";
+    public static final String PRODUCTS_ADD_PRODUCT_SELECT_MNN = "/products/add_product/select_mnn";
+    public static final String PRODUCTS_ADD_PRODUCT_SELECT_MNN_PAGE_NUMBER_PAGE = "/products/add_product/select_mnn/page/{numberPage}";
+    public static final String ADD_PRODUCT_MNN = "add_product-mnn";
+    public static final String PRODUCTS_ADD_PRODUCT_SELECT_MNN_SAVE = "/products/add_product/select_mnn/save";
+    public static final String PRODUCTS_ADD_PRODUCT_SELECT_CATEGORY = "/products/add_product/select_category";
+    public static final String PRODUCTS_ADD_PRODUCT_SELECT_CATEGORY_PAGE_NUMBER_PAGE = "/products/add_product/select_category/page/{numberPage}";
+    public static final String ADD_PRODUCT_CATEGORY = "add_product-category";
+    public static final String PRODUCTS_ADD_PRODUCT_SELECT_CATEGORY_SAVE = "/products/add_product/select_category/save";
+    public static final String PRODUCTS_ADD_PRODUCT_SELECT_PHARMACIES = "/products/add_product/select_pharmacies";
+    public static final String PRODUCTS_ADD_PRODUCT_SELECT_PHARMACIES_PAGE_NUMBER_PAGE = "/products/add_product/select_pharmacies/page/{numberPage}";
+    public static final String ADD_PRODUCT_PHARMACIES = "add_product-pharmacies";
+    public static final String PRODUCTS_ADD_PRODUCT1 = "/products/add_product";
+    public static final String REDIRECT_PRODUCTS = "redirect:/products";
+    public static final String PRODUCTS_PAGE_ID_PRODUCT_NUMBER_PAGE = "/products/page/{idProduct}/{numberPage}";
+    public static final String ID_PRODUCT = "idProduct";
+    public static final String EDIT_PRODUCT = "edit_product";
+    public static final String PRODUCTS_EDIT_PRODUCT_SELECT_PRODUCER = "/products/edit_product/select_producer";
+    public static final String PRODUCTS_EDIT_PRODUCT_SELECT_PRODUCER_PAGE_NUMBER_PAGE = "/products/edit_product/select_producer/page/{numberPage}";
+    public static final String EDIT_PRODUCT_PRODUCER = "edit_product-producer";
+    public static final String PRODUCTS_EDIT_PRODUCT_SELECT_PRODUCER_SAVE = "/products/edit_product/select_producer/save";
+    public static final String PRODUCTS_EDIT_PRODUCT_SELECT_MNN = "/products/edit_product/select_mnn";
+    public static final String PRODUCTS_EDIT_PRODUCT_SELECT_MNN_PAGE_NUMBER_PAGE = "/products/edit_product/select_mnn/page/{numberPage}";
+    public static final String EDIT_PRODUCT_MNN = "edit_product-mnn";
+    public static final String PRODUCTS_EDIT_PRODUCT_SELECT_MNN_SAVE = "/products/edit_product/select_mnn/save";
+    public static final String PRODUCTS_EDIT_PRODUCT_SELECT_CATEGORY = "/products/edit_product/select_category";
+    public static final String PRODUCTS_EDIT_PRODUCT_SELECT_CATEGORY_PAGE_NUMBER_PAGE = "/products/edit_product/select_category/page/{numberPage}";
+    public static final String EDIT_PRODUCT_CATEGORY = "edit_product-category";
+    public static final String PRODUCTS_EDIT_PRODUCT_SELECT_CATEGORY_SAVE = "/products/edit_product/select_category/save";
+    public static final String PRODUCTS_EDIT_PRODUCT_SELECT_PHARMACIES = "/products/edit_product/select_pharmacies";
+    public static final String PRODUCTS_EDIT_PRODUCT_SELECT_PHARMACIES_PAGE_NUMBER_PAGE = "/products/edit_product/select_pharmacies/page/{numberPage}";
+    public static final String EDIT_PRODUCT_PHARMACIES = "edit_product-pharmacies";
+    public static final String PRODUCTS_EDIT_PRODUCT_ID_PRODUCT = "/products/edit_product/{idProduct}";
+    public static final String PRODUCTS_PAGE_ID_PRODUCT_NUMBER_PAGE1 = "/products/page/{idProduct}/{numberPage}";
     private final ProductService productService;
     private final ProducerService producerService;
     private final MnnService mnnService;
@@ -59,14 +106,14 @@ public class ProductController {
     private final PharmacyService pharmacyService;
 
 
-    @GetMapping("/products")
+    @GetMapping(PRODUCTS)
     public String first(Model model, SessionStatus sessionStatus) {
         sessionStatus.setComplete();
         return findProducts(NUMBER_PAGE, SIZE, ID, ASС, null, null, null, model, sessionStatus);
     }
 
-    @GetMapping("/products/page/{numberPage}")
-    public String findProducts(@PathVariable("numberPage") int numberPage, int size,
+    @GetMapping(PRODUCTS_PAGE_NUMBER_PAGE)
+    public String findProducts(@PathVariable(NUMBER_PAGE3) int numberPage, int size,
                                String sortField, String sortDir, String producerFilter, String drugNameFilter,
                                String pharmacyFilter, Model model, SessionStatus sessionStatus) {
         sessionStatus.setComplete();
@@ -75,7 +122,7 @@ public class ProductController {
                 .drugNameFilter(drugNameFilter)
                 .pharmacyFilter(pharmacyFilter)
                 .build();
-        Page<ProductDto> page = productService.findAllProductsWithPaginated(numberPage, size, sortField, sortDir, productFilter);
+        Page<ProductDto> page = productService.findProductWithPaginated(productFilter, numberPage, size, sortField, sortDir);
         int totalPages = page.getTotalPages();
         long totalElements = page.getTotalElements();
         List<ProductDto> productDtoList = page.getContent();
@@ -87,7 +134,7 @@ public class ProductController {
         return "products";
     }
 
-    private void paginatedAndSorted(@PathVariable("numberPage") int numberPage, int size, int totalPages, long totalElements,
+    private void paginatedAndSorted(@PathVariable(NUMBER_PAGE1) int numberPage, int size, int totalPages, long totalElements,
                                     String sortField, String sortDir, Model model) {
         model.addAttribute(NUMBER_PAGE1, numberPage);
         model.addAttribute(SIZE1, size);
@@ -98,29 +145,29 @@ public class ProductController {
         model.addAttribute(DESC_SORT, sortDir.equals(ASС) ? DESC : ASС);
     }
 
-    @GetMapping("/products/add_product")
+    @GetMapping(PRODUCTS_ADD_PRODUCT)
     public String addProduct(Model model) {
-        model.addAttribute("prescription", PrescriptionEnum.values());
-        return "add_product";
+        model.addAttribute(PRESCRIPTION, PrescriptionEnum.values());
+        return ADD_PRODUCT;
     }
 
-    @GetMapping("/products/add_product/select_producer")
+    @GetMapping(PRODUCTS_ADD_PRODUCT_SELECT_PRODUCER)
     public String selectProducer(Model model) {
         return findProducers(NUMBER_PAGE, SIZE, ID, ASС, null, model);
     }
 
-    @GetMapping("/products/add_product/select_producer/page/{numberPage}")
-    public String findProducers(@PathVariable("numberPage") int numberPage, int size,
+    @GetMapping(PRODUCTS_ADD_PRODUCT_SELECT_PRODUCER_PAGE_NUMBER_PAGE)
+    public String findProducers(@PathVariable(NUMBER_PAGE1) int numberPage, int size,
                                 String sortField, String sortDir, String nameFilter, Model model) {
         selectProducerForProduct(numberPage, size, sortField, sortDir, nameFilter, model);
-        return "add_product-producer";
+        return ADD_PRODUCT_PRODUCER;
     }
 
     private void selectProducerForProduct(int numberPage, int size, String sortField, String sortDir, String nameFilter, Model model) {
         ProducerFilter producerFilter = ProducerFilter.builder()
                 .nameProducer(nameFilter)
                 .build();
-        Page<ProducerDto> page = producerService.findAllProducersWithPaginated(producerFilter, numberPage, size, sortField, sortDir);
+        Page<ProducerDto> page = producerService.findProducerWithPaginated(producerFilter, numberPage, size, sortField, sortDir);
         int totalPages = page.getTotalPages();
         long totalElements = page.getTotalElements();
         List<ProducerDto> producers = page.getContent();
@@ -128,23 +175,23 @@ public class ProductController {
         model.addAttribute(PRODUCERS, producers);
     }
 
-    @GetMapping("/products/add_product/select_producer/save")
+    @GetMapping(PRODUCTS_ADD_PRODUCT_SELECT_PRODUCER_SAVE)
     public String saveProducer(Model model, Integer idProducer) {
         ProducerDto producerDto = producerService.findProducerById(idProducer);
         model.addAttribute(PRODUCER_DTO, producerDto);
-        return "add_product";
+        return ADD_PRODUCT;
     }
 
-    @GetMapping("/products/add_product/select_mnn")
+    @GetMapping(PRODUCTS_ADD_PRODUCT_SELECT_MNN)
     public String selectMnn(Model model) {
         return findMnn(NUMBER_PAGE, SIZE, ID, ASС, null, model);
     }
 
-    @GetMapping("/products/add_product/select_mnn/page/{numberPage}")
-    public String findMnn(@PathVariable("numberPage") int numberPage, int size,
+    @GetMapping(PRODUCTS_ADD_PRODUCT_SELECT_MNN_PAGE_NUMBER_PAGE)
+    public String findMnn(@PathVariable(NUMBER_PAGE1) int numberPage, int size,
                           String sortField, String sortDir, String titleFilter, Model model) {
         selectMnnForProduct(numberPage, size, sortField, sortDir, titleFilter, model);
-        return "add_product-mnn";
+        return ADD_PRODUCT_MNN;
     }
 
     private void selectMnnForProduct(int numberPage, int size, String sortField, String sortDir, String titleFilter, Model model) {
@@ -159,23 +206,23 @@ public class ProductController {
         model.addAttribute(MNN_DTO_LIST, mnnDtoList);
     }
 
-    @GetMapping("/products/add_product/select_mnn/save")
+    @GetMapping(PRODUCTS_ADD_PRODUCT_SELECT_MNN_SAVE)
     public String saveMnn(Model model, Integer idMnn) {
         MnnDto mnnDto = mnnService.findMnnById(idMnn);
         model.addAttribute(MNN_DTO, mnnDto);
-        return "add_product";
+        return ADD_PRODUCT;
     }
 
-    @GetMapping("/products/add_product/select_category")
+    @GetMapping(PRODUCTS_ADD_PRODUCT_SELECT_CATEGORY)
     public String selectCategory(Model model) {
         return findCategory(NUMBER_PAGE, SIZE, ID, ASС, null, model);
     }
 
-    @GetMapping("/products/add_product/select_category/page/{numberPage}")
-    public String findCategory(@PathVariable("numberPage") int numberPage, int size,
+    @GetMapping(PRODUCTS_ADD_PRODUCT_SELECT_CATEGORY_PAGE_NUMBER_PAGE)
+    public String findCategory(@PathVariable(NUMBER_PAGE1) int numberPage, int size,
                                String sortField, String sortDir, String titleFilter, Model model) {
         selectCategoryForProduct(numberPage, size, sortField, sortDir, titleFilter, model);
-        return "add_product-category";
+        return ADD_PRODUCT_CATEGORY;
     }
 
     private void selectCategoryForProduct(int numberPage, int size, String sortField, String sortDir, String titleFilter, Model model) {
@@ -190,23 +237,23 @@ public class ProductController {
         model.addAttribute(CATEGORY_DTO_LIST, categoryDtoList);
     }
 
-    @GetMapping("/products/add_product/select_category/save")
+    @GetMapping(PRODUCTS_ADD_PRODUCT_SELECT_CATEGORY_SAVE)
     public String saveCategory(Model model, Integer idCategory) {
         CategoryDto categoryDto = categoryService.findCategoryById(idCategory);
         model.addAttribute(CATEGORY_DTO, categoryDto);
-        return "add_product";
+        return ADD_PRODUCT;
     }
 
-    @GetMapping("/products/add_product/select_pharmacies")
+    @GetMapping(PRODUCTS_ADD_PRODUCT_SELECT_PHARMACIES)
     public String selectPharmacies(Model model) {
         return findPharmacy(NUMBER_PAGE, SIZE, ID, ASС, null, model);
     }
 
-    @GetMapping("/products/add_product/select_pharmacies/page/{numberPage}")
-    public String findPharmacy(@PathVariable("numberPage") int numberPage, int size, String sortField,
+    @GetMapping(PRODUCTS_ADD_PRODUCT_SELECT_PHARMACIES_PAGE_NUMBER_PAGE)
+    public String findPharmacy(@PathVariable(NUMBER_PAGE1) int numberPage, int size, String sortField,
                                String sortDir, String titleFilter, Model model) {
         selectPharmaciesForProduct(numberPage, size, sortField, sortDir, titleFilter, model);
-        return "add_product-pharmacies";
+        return ADD_PRODUCT_PHARMACIES;
     }
 
     private void selectPharmaciesForProduct(int numberPage, int size, String sortField, String sortDir,
@@ -222,24 +269,15 @@ public class ProductController {
         model.addAttribute(PHARMACY_DTO_LIST, pharmacyDtoList);
     }
 
-    @GetMapping("/products/add_product/select_pharmacies/save")
-    public String savePharmacies(Model model, Integer[] idPharmacies) {
-        List<PharmacyDto> pharmacyDtoList = pharmacyService.findPharmaciesByIds(idPharmacies);
-        model.addAttribute(PHARMACY_DTO_LIST1, pharmacyDtoList);
-        return "add_product";
+
+    @PostMapping(PRODUCTS_ADD_PRODUCT1)
+    public String createProduct(ProductDto productDto) {
+        productService.saveProduct(productDto);
+        return REDIRECT_PRODUCTS;
     }
 
-    @PostMapping("/products/add_product")
-    public String createProduct(Integer producerId, Integer mnnId, Integer categoryId, Integer[] pharmaciesId,
-                                String drugName, PrescriptionEnum prescriptionEnum, String instruction, Double price,
-                                Double count, Date dateTime) {
-        productService.saveProduct(producerId, mnnId, categoryId, pharmaciesId, drugName, prescriptionEnum, instruction,
-                price, count, dateTime);
-        return "redirect:/products";
-    }
-
-    @GetMapping("/products/page/{idProduct}/{numberPage}")
-    public String editProduct(@PathVariable("idProduct") Integer idProduct, @PathVariable("numberPage") int numberPage,
+    @GetMapping(PRODUCTS_PAGE_ID_PRODUCT_NUMBER_PAGE)
+    public String editProduct(@PathVariable(ID_PRODUCT) Integer idProduct, @PathVariable(NUMBER_PAGE1) int numberPage,
                               int size, String sortField, String sortDir, Model model) {
         ProductDto productDto = productService.findProductById(idProduct);
         model.addAttribute(NUMBER_PAGE2, numberPage);
@@ -247,98 +285,88 @@ public class ProductController {
         model.addAttribute(SORT_FIELD, sortField);
         model.addAttribute(SORT_DIR, sortDir);
         model.addAttribute(PRODUCT_DTO, productDto);
-        return "edit_product";
+        return EDIT_PRODUCT;
     }
 
-    @GetMapping("/products/edit_product/select_producer")
+    @GetMapping(PRODUCTS_EDIT_PRODUCT_SELECT_PRODUCER)
     public String selectProducerEdit(Model model) {
         return findProducerEdit(NUMBER_PAGE, SIZE, ID, ASС, null, model);
     }
 
-    @GetMapping("/products/edit_product/select_producer/page/{numberPage}")
-    public String findProducerEdit(@PathVariable("numberPage") int numberPage, int size,
+    @GetMapping(PRODUCTS_EDIT_PRODUCT_SELECT_PRODUCER_PAGE_NUMBER_PAGE)
+    public String findProducerEdit(@PathVariable(NUMBER_PAGE1) int numberPage, int size,
                                    String sortField, String sortDir, String producerFilter, Model model) {
         selectProducerForProduct(numberPage, size, sortField, sortDir, producerFilter, model);
-        return "edit_product-producer";
+        return EDIT_PRODUCT_PRODUCER;
     }
 
-    @GetMapping("/products/edit_product/select_producer/save")
+    @GetMapping(PRODUCTS_EDIT_PRODUCT_SELECT_PRODUCER_SAVE)
     public String saveProducerEdit(Model model, Integer producerId) {
         ProducerDto producerDto = producerService.findProducerById(producerId);
         model.addAttribute(PRODUCER_DTO1, producerDto);
-        return "edit_product";
+        return EDIT_PRODUCT;
     }
 
-    @GetMapping("/products/edit_product/select_mnn")
+    @GetMapping(PRODUCTS_EDIT_PRODUCT_SELECT_MNN)
     public String selectMnnEdit(Model model) {
         return findMnnEdit(NUMBER_PAGE, SIZE, ID, ASС, null, model);
     }
 
-    @GetMapping("/products/edit_product/select_mnn/page/{numberPage}")
-    public String findMnnEdit(@PathVariable("numberPage") int numberPage, int size,
+    @GetMapping(PRODUCTS_EDIT_PRODUCT_SELECT_MNN_PAGE_NUMBER_PAGE)
+    public String findMnnEdit(@PathVariable(NUMBER_PAGE1) int numberPage, int size,
                               String sortField, String sortDir, String mnnFilter, Model model) {
         selectMnnForProduct(numberPage, size, sortField, sortDir, mnnFilter, model);
-        return "edit_product-mnn";
+        return EDIT_PRODUCT_MNN;
     }
 
-    @GetMapping("/products/edit_product/select_mnn/save")
+    @GetMapping(PRODUCTS_EDIT_PRODUCT_SELECT_MNN_SAVE)
     public String saveMnnEdit(Model model, Integer mnnId) {
         MnnDto mnnDto = mnnService.findMnnById(mnnId);
         model.addAttribute(MNN_DTO1, mnnDto);
-        return "edit_product";
+        return EDIT_PRODUCT;
     }
 
-    @GetMapping("/products/edit_product/select_category")
+    @GetMapping(PRODUCTS_EDIT_PRODUCT_SELECT_CATEGORY)
     public String selectCategoryEdit(Model model) {
         return findCategoryEdit(NUMBER_PAGE, SIZE, ID, ASС, null, model);
     }
 
-    @GetMapping("/products/edit_product/select_category/page/{numberPage}")
-    public String findCategoryEdit(@PathVariable("numberPage") int numberPage, int size,
+    @GetMapping(PRODUCTS_EDIT_PRODUCT_SELECT_CATEGORY_PAGE_NUMBER_PAGE)
+    public String findCategoryEdit(@PathVariable(NUMBER_PAGE1) int numberPage, int size,
                                    String sortField, String sortDir, String categoryFilter, Model model) {
         selectCategoryForProduct(numberPage, size, sortField, sortDir, categoryFilter, model);
-        return "edit_product-category";
+        return EDIT_PRODUCT_CATEGORY;
     }
 
-    @GetMapping("/products/edit_product/select_category/save")
+    @GetMapping(PRODUCTS_EDIT_PRODUCT_SELECT_CATEGORY_SAVE)
     public String saveCategoryEdit(Model model, Integer categoryId) {
         CategoryDto categoryDto = categoryService.findCategoryById(categoryId);
         model.addAttribute(CATEGORY_DTO1, categoryDto);
-        return "edit_product";
+        return EDIT_PRODUCT;
     }
 
-    @GetMapping("/products/edit_product/select_pharmacies")
+    @GetMapping(PRODUCTS_EDIT_PRODUCT_SELECT_PHARMACIES)
     public String selectPharmacyEdit(Model model) {
         return findPharmacyEdit(NUMBER_PAGE, SIZE, ID, ASС, null, model);
     }
 
-    @GetMapping("/products/edit_product/select_pharmacies/page/{numberPage}")
-    public String findPharmacyEdit(@PathVariable("numberPage") int numberPage, int size, String sortField,
+    @GetMapping(PRODUCTS_EDIT_PRODUCT_SELECT_PHARMACIES_PAGE_NUMBER_PAGE)
+    public String findPharmacyEdit(@PathVariable(NUMBER_PAGE1) int numberPage, int size, String sortField,
                                    String sortDir, String pharmacyFilter, Model model) {
         selectPharmaciesForProduct(numberPage, size, sortField, sortDir, pharmacyFilter, model);
-        return "edit_product-pharmacies";
+        return EDIT_PRODUCT_PHARMACIES;
     }
 
-    @GetMapping("/products/edit_product/select_pharmacies/save")
-    public String savePharmacyEdit(Model model, Integer[] pharmaciesIds) {
-        List<PharmacyDto> pharmacyDtoList = pharmacyService.findPharmaciesByIds(pharmaciesIds);
-        model.addAttribute(PHARMACY_DTO_LIST2, pharmacyDtoList);
-        return "edit_product";
-    }
-
-    @PostMapping("/products/edit_product/{idProduct}")
-    public String updateBook(@PathVariable("idProduct") Integer idProduct, Integer producerId, Integer mnnId, Integer categoryId,
-                             Integer[] pharmaciesIds, String drugName, PrescriptionEnum prescription,
-                             String instruction, Double price, Double count, Date dateTime, int numberPage,
-                             int size, String sortField, String sortDir, Model model, SessionStatus sessionStatus) {
-        productService.saveProduct(producerId, mnnId, categoryId, pharmaciesIds, drugName, prescription, instruction, price,
-                count, dateTime);
+    @PostMapping(PRODUCTS_EDIT_PRODUCT_ID_PRODUCT)
+    public String updateProduct(@PathVariable(ID_PRODUCT) Integer idProduct, ProductDto productDto, int numberPage,
+                                int size, String sortField, String sortDir, Model model, SessionStatus sessionStatus) {
+        productService.saveProduct(productDto);
         return findProducts(numberPage, size, sortField, sortDir, null, null,
                 null, model, sessionStatus);
     }
 
-    @PostMapping("/products/page/{idProduct}/{numberPage}")
-    public String deleteProduct(@PathVariable("idProduct") Integer idProduct, @PathVariable("numberPage") int numberPage,
+    @PostMapping(PRODUCTS_PAGE_ID_PRODUCT_NUMBER_PAGE1)
+    public String deleteProduct(@PathVariable(ID_PRODUCT) Integer idProduct, @PathVariable(NUMBER_PAGE1) int numberPage,
                                 int size, String sortField, String sortDir, SessionStatus sessionStatus, Model model) {
         productService.deleteProductById(idProduct);
         model.addAttribute(NUMBER_PAGE1, numberPage);

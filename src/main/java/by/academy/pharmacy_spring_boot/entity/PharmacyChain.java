@@ -9,7 +9,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,10 +21,10 @@ public class PharmacyChain {
     @Column(name = "chain_id")
     private Integer id;
 
-    @Column(name = "name_chain")
+    @Column(name = "name_chain", unique = true)
     private String nameChain;
 
-    @OneToMany(mappedBy = "pharmacyChain")
+    @OneToMany(mappedBy = "pharmacyChain", cascade = CascadeType.MERGE)
     @ToString.Exclude
     private List<Pharmacy> pharmacies = new ArrayList<>();
 
@@ -34,11 +33,19 @@ public class PharmacyChain {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PharmacyChain that = (PharmacyChain) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) && Objects.equals(nameChain, that.nameChain);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, nameChain);
+    }
+
+    @Override
+    public String toString() {
+        return "PharmacyChain{" +
+                "id=" + id +
+                ", nameChain='" + nameChain + '\'' +
+                '}';
     }
 }

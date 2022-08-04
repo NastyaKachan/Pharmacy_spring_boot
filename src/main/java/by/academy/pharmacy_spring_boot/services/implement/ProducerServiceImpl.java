@@ -28,7 +28,7 @@ public class ProducerServiceImpl implements ProducerService {
     private final ProducerRepository producerRepository;
 
     @Override
-    public Page<ProducerDto> findAllProducersWithPaginated(ProducerFilter producerFilter, int numberPage, int size, String sortField,
+    public Page<ProducerDto> findProducerWithPaginated(ProducerFilter producerFilter, int numberPage, int size, String sortField,
                                                            String sortDir) {
         Specification<Producer> producerSpecification =
                 Specification
@@ -51,18 +51,11 @@ public class ProducerServiceImpl implements ProducerService {
 
     @Override
     public ProducerDto findProducerById(Integer id) {
-        return producerRepository.findById(id)
-                .map(producerMapper::toDto)
-                .orElse(null);
+        return producerMapper.toDto(producerRepository.findById(id).orElse(null));
     }
 
     @Override
-    public void createProducer(ProducerDto producerDto) {
-        producerRepository.save(producerMapper.toEntity(producerDto));
-    }
-
-    @Override
-    public void updateProducer(ProducerDto producerDto) {
+    public void saveProducer(ProducerDto producerDto) {
         producerRepository.save(producerMapper.toEntity(producerDto));
     }
 
